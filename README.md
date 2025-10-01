@@ -343,30 +343,6 @@ project2025/
 └── pom.xml
 ```
 
-## 🤝 Contribuindo
-
-1. Fork o projeto
-2. Crie uma branch: `git checkout -b feature/minha-feature`
-3. Commit suas mudanças: `git commit -m 'Adiciona minha feature'`
-4. Push para a branch: `git push origin feature/minha-feature`
-5. Abra um Pull Request
-
 ## 📄 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 👥 Autores
-
-- **Gustavo Carmo** - [gustavocarmoh](https://github.com/gustavocarmoh)
-
-## 🙏 Agradecimentos
-
-- FIAP - Faculdade de Informática e Administração Paulista
-- Oracle Database Team
-- Spring Boot Community
-
----
-
-**🌟 Desenvolvido com ❤️ para FIAP 2025**
-
-*Para dúvidas ou suporte, consulte a [documentação completa](project2025/docs/) ou abra uma issue.*
