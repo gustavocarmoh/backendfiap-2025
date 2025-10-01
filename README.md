@@ -246,51 +246,136 @@ Leia mais: [.devcontainer/README-devcontainer.md](.devcontainer/README-devcontai
 
 ### Autenticação
 ```
-POST   /api/auth/register   # Registrar novo usuário
-POST   /api/auth/login      # Login (retorna JWT)
-GET    /api/auth/me         # Dados do usuário autenticado
+POST   /api/v1/auth/register      # Registrar novo usuário
+POST   /api/v1/auth/login         # Login (retorna JWT)
+GET    /api/v1/auth/health        # Status de saúde do serviço
+GET    /api/v1/auth/profile       # Perfil do usuário autenticado
 ```
 
 ### Usuários
 ```
-GET    /api/v1/users        # Listar usuários
-GET    /api/v1/users/{id}   # Buscar por ID
-POST   /api/v1/users        # Criar usuário
-PUT    /api/v1/users/{id}   # Atualizar
-DELETE /api/v1/users/{id}   # Remover
+GET    /api/v1/users/{id}         # Buscar por ID
+PUT    /api/v1/users/{id}         # Atualizar usuário
+DELETE /api/v1/users/{id}         # Remover usuário (admin)
+PUT    /api/v1/users/{id}/promote # Promover usuário (admin)
+PATCH  /api/v1/users/me           # Atualizar perfil próprio
+```
+
+### Informações do Usuário
+```
+GET    /api/v1/user/me            # Dados completos do usuário autenticado
+GET    /api/v1/user/plan          # Plano de assinatura do usuário
+GET    /api/v1/user/profile       # Perfil resumido do usuário
 ```
 
 ### Oracle PL/SQL ⭐
 ```
-GET    /api/v1/oracle/indicador-saude/{userId}              # Function: Calcular saúde
-GET    /api/v1/oracle/relatorio-nutricao/{userId}           # Function: Relatório texto
-GET    /api/v1/oracle/relatorio-json/{userId}               # Function: Relatório JSON
-POST   /api/v1/oracle/alertas-nutricionais/{userId}         # Procedure: Registrar alertas
-GET    /api/v1/oracle/relatorio-consumo/{userId}            # Procedure: Relatório completo
-POST   /api/v1/oracle/analise-completa/{userId}             # Análise full (chama todos)
+GET    /api/v1/oracle/indicador-saude/{userId}              # Function: Calcular score de saúde (0-100)
+GET    /api/v1/oracle/relatorio-nutricao/{userId}           # Function: Relatório texto formatado
+POST   /api/v1/oracle/alertas-nutricionais/{userId}         # Procedure: Registrar alertas automáticos
+POST   /api/v1/oracle/relatorio-consumo                     # Procedure: Relatório semanal completo
+POST   /api/v1/oracle/analise-completa/{userId}             # Análise completa (chama todos)
+GET    /api/v1/oracle/estatisticas/{userId}                 # Estatísticas nutricionais agregadas
 ```
 
 ### Planos Nutricionais
 ```
-GET    /api/v1/nutrition-plans                    # Listar planos
-GET    /api/v1/nutrition-plans/user/{userId}      # Por usuário
-POST   /api/v1/nutrition-plans                    # Criar plano
-PUT    /api/v1/nutrition-plans/{id}               # Atualizar
-DELETE /api/v1/nutrition-plans/{id}               # Remover
+GET    /api/nutrition-plans                     # Listar todos os planos do usuário
+GET    /api/nutrition-plans/{planId}            # Buscar plano específico
+GET    /api/nutrition-plans/today               # Plano de hoje
+GET    /api/nutrition-plans/week                # Planos da semana atual
+GET    /api/nutrition-plans/week/{date}         # Planos de uma semana específica
+GET    /api/nutrition-plans/pending             # Planos pendentes
+GET    /api/nutrition-plans/future              # Planos futuros
+POST   /api/nutrition-plans                     # Criar novo plano
+PUT    /api/nutrition-plans/{planId}            # Atualizar plano
+PATCH  /api/nutrition-plans/{planId}/completion # Marcar completude
+DELETE /api/nutrition-plans/{planId}            # Remover plano
+```
+
+### Planos de Assinatura
+```
+GET    /api/v1/subscription-plans               # Listar planos ativos
+GET    /api/v1/subscription-plans/all           # Listar todos (admin)
+GET    /api/v1/subscription-plans/{id}          # Buscar plano por ID
+POST   /api/v1/subscription-plans               # Criar plano (admin)
+PUT    /api/v1/subscription-plans/{id}          # Atualizar plano (admin)
+PATCH  /api/v1/subscription-plans/{id}/activate # Ativar plano (admin)
+PATCH  /api/v1/subscription-plans/{id}/deactivate # Desativar plano (admin)
+DELETE /api/v1/subscription-plans/{id}          # Remover plano (admin)
 ```
 
 ### Assinaturas
 ```
-GET    /api/v1/subscriptions                      # Listar assinaturas
-GET    /api/v1/subscriptions/user/{userId}        # Por usuário
-POST   /api/v1/subscriptions                      # Criar assinatura
+GET    /api/v1/subscriptions                    # Assinatura do usuário autenticado
+GET    /api/v1/subscriptions/{id}               # Buscar assinatura por ID
+GET    /api/v1/subscriptions/all                # Todas as assinaturas (admin)
+GET    /api/v1/subscriptions/pending            # Assinaturas pendentes (admin)
+GET    /api/v1/subscriptions/status/{status}    # Por status (admin)
+GET    /api/v1/subscriptions/count/active       # Contador de ativas
+POST   /api/v1/subscriptions                    # Criar assinatura
+PATCH  /api/v1/subscriptions/{id}/status        # Alterar status (admin)
+PATCH  /api/v1/subscriptions/{id}/approve       # Aprovar assinatura (admin)
+PATCH  /api/v1/subscriptions/{id}/reject        # Rejeitar assinatura (admin)
+PATCH  /api/v1/subscriptions/{id}/cancel        # Cancelar assinatura
 ```
 
-### Outras APIs
-- **Fotos de Perfil**: `/api/v1/photos`
-- **Prestadores de Serviço**: `/api/v1/service-providers`
-- **Chat**: `/api/v1/chat`
-- **Health Check**: `/actuator/health`
+### Prestadores de Serviço
+```
+GET    /api/v1/service-providers                # Listar todos
+GET    /api/v1/service-providers/{id}           # Buscar por ID
+GET    /api/v1/service-providers/active         # Listar apenas ativos
+GET    /api/v1/service-providers/search         # Buscar por nome/especialidade
+GET    /api/v1/service-providers/location       # Buscar por localização
+GET    /api/v1/service-providers/admin/stats    # Estatísticas (admin)
+POST   /api/v1/service-providers                # Criar prestador (manager)
+PUT    /api/v1/service-providers/{id}           # Atualizar (manager)
+DELETE /api/v1/service-providers/{id}/deactivate # Desativar (admin)
+DELETE /api/v1/service-providers/{id}           # Remover permanente (admin)
+```
+
+### Fotos de Perfil
+```
+GET    /api/v1/user/photo/my-photo              # Minha foto de perfil
+GET    /api/v1/user/photo/{photoId}             # Buscar foto por ID
+GET    /api/v1/user/photo/status                # Status da foto do usuário
+GET    /api/v1/user/photo/admin/stats           # Estatísticas de fotos (admin)
+POST   /api/v1/user/photo/upload                # Upload de foto (multipart)
+DELETE /api/v1/user/photo/my-photo              # Remover minha foto
+GET    /api/photos/default                      # Foto padrão do sistema
+```
+
+### Chat
+```
+GET    /api/chat/sessions                       # Listar sessões de chat
+GET    /api/chat/sessions/{sessionId}           # Mensagens de uma sessão
+GET    /api/chat/messages                       # Todas as mensagens do usuário
+GET    /api/chat/status                         # Status do sistema de chat
+GET    /api/chat/admin/statistics               # Estatísticas de chat (admin)
+POST   /api/chat/send                           # Enviar mensagem
+```
+
+### Admin Dashboard
+```
+GET    /api/admin/dashboard                     # Dashboard completo
+GET    /api/admin/dashboard/growth              # Crescimento geral
+GET    /api/admin/dashboard/growth/last-30-days # Crescimento últimos 30 dias
+GET    /api/admin/dashboard/growth/last-12-months # Crescimento últimos 12 meses
+GET    /api/admin/dashboard/growth/this-year    # Crescimento do ano
+GET    /api/admin/dashboard/summary             # Resumo executivo
+```
+
+### Documentação
+```
+GET    /api/v1/docs                             # Documentação da API
+GET    /api/v1/docs/swagger                     # Swagger JSON
+GET    /api/v1/docs/swagger-ui                  # Swagger UI
+GET    /api/v1/docs/api-spec                    # OpenAPI spec
+GET    /api/v1/docs/health                      # Health check docs
+GET    /api/v1/springdoc/info                   # Info do SpringDoc
+GET    /api/v1/springdoc/groups                 # Grupos de endpoints
+GET    /api/v1/springdoc/health                 # Health SpringDoc
+```
 
 ## 🧪 Testes
 
