@@ -12,9 +12,10 @@
   //  "postCreateCommand":"mvn -q -DskipTests dependency:go-offline",
   //  "postStartCommand":"bash -lc 'wait-for-it postgres:5433 -- mvn -q org.springframework.boot:spring-boot-maven-plugin:3.3.2:run -Dspring-boot.run.jvmArguments=\"${SPRING_BOOT_JVM_ARGS}\"'",
    "forwardPorts":[
-      8080,
+      8000,
       5005,
-      5432
+      1521,
+      5500
    ],
    "customizations":{
       "vscode":{
@@ -30,7 +31,7 @@
             "eamodio.gitlens",
             "redhat.vscode-yaml",
             "vscjava.vscode-java-debug",
-            "cweijan.vscode-mysql-client2",
+            "Oracle.oracledevtools",
             "Postman.postman-for-vscode",
             "bierner.markdown-mermaid"
          ],

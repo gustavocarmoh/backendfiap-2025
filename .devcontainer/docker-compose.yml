@@ -1,42 +1,44 @@
 services:
-  postgres:
-    image: postgres:16
+  oracle:
+    image: container-registry.oracle.com/database/express:21.3.0-xe
+    container_name: nutrixpert-oracle-xe
     environment:
-      POSTGRES_PASSWORD: nutrisecret
-      POSTGRES_USER: postgres
-      POSTGRES_DB: nutrixpert
+      ORACLE_PWD: OraclePassword123
+      ORACLE_CHARACTERSET: AL32UTF8
       TZ: America/Sao_Paulo
     volumes:
-      - nutrixpert_db_data:/var/lib/postgresql/data
-      # scripts de init da sua app (criam usuário/banco)
-      # - ./initdb:/docker-entrypoint-initdb.d:ro
-    shm_size: "256mb"
+      - oracle_data:/opt/oracle/oradata
+      - ./init-oracle.sh:/opt/oracle/scripts/startup/init-oracle.sh:ro
+    shm_size: "1gb"
     restart: always
     ports:
-      - 5432:5432
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+      - 1521:1521  # Oracle Database
+      - 5500:5500  # Oracle Enterprise Manager Express
+    healthcheck:
+      test: ["CMD", "sqlplus", "-L", "sys/OraclePassword123@//localhost:1521/XE as sysdba", "@/dev/null"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
 
   app:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
     depends_on:
-      - postgres
+      oracle:
+        condition: service_healthy
     environment:
       TZ: America/Sao_Paulo
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/nutrixpert
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: nutrisecret
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@oracle:1521:XE
+      SPRING_DATASOURCE_USERNAME: nutrixpert
+      SPRING_DATASOURCE_PASSWORD: NutriXpert2025!
+      ORACLE_SCHEMA: NUTRIXPERT
       MAVEN_OPTS: "-Xms128m -Xmx256m"
       SPRING_BOOT_JVM_ARGS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xms128m -Xmx512m -XX:MaxRAMPercentage=60"
       JAVA_TOOL_OPTIONS: "-Dfile.encoding=UTF-8 -Duser.timezone=America/Sao_Paulo"
-      SPRING_DATASOURCE_HIKARI_INITIALIZATION-FAIL-TIMEOUT: "60000"
+      SPRING_DATASOURCE_HIKARI_INITIALIZATION-FAIL-TIMEOUT: "120000"
     working_dir: /workspaces
     command: [ "bash", "-lc", "sleep infinity" ]
     volumes:
@@ -44,10 +46,11 @@ services:
       - maven-repo:/home/vscode/.m2
     ports:
       - "8000:8000"
+      - "5005:5005"  # Debug port
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: always
 
 volumes:
-  nutrixpert_db_data:
+  oracle_data:
   maven-repo:
