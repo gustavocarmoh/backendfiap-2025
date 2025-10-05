@@ -1,0 +1,32 @@
+{
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "java.autobuild.enabled": true,
+  "java.import.maven.enabled": true,
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-21",
+      "path": "${env:JAVA_HOME}",
+      "default": true
+    }
+  ],
+  "spring-boot.ls.checkJVM": false,
+  "spring-boot.ls.java.home": "${env:JAVA_HOME}",
+  "spring.initializr.defaultLanguage": "Java",
+  "maven.terminal.useJavaHome": true,
+  "maven.view": "hierarchical",
+  "files.exclude": {
+    "**/.classpath": true,
+    "**/.project": true,
+    "**/.settings": true,
+    "**/.factorypath": true
+  },
+  "java.completion.favoriteStaticMembers": [
+    "org.junit.jupiter.api.Assertions.*",
+    "org.mockito.Mockito.*",
+    "org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*",
+    "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*",
+    "org.springframework.test.web.servlet.result.MockMvcResultHandlers.*"
+  ],
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable"
+}

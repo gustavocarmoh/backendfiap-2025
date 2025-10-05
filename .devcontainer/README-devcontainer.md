@@ -12,9 +12,40 @@
 2. **Ctrl/Cmd+Shift+P** → *Dev Containers: Reopen in Container*
 3. Aguarde a inicialização (primeira vez pode levar 5-10 minutos):
    - Download da imagem Oracle XE (2.5GB)
-   - Build do Dockerfile com Oracle Instant Client
+   - Build do Dockerfile com Oracle Instant Client + Maven
    - Inicialização do banco Oracle
    - Criação automática do usuário `nutrixpert`
+   - Download de dependências Maven (Spring Boot)
+
+### 1.1. Primeiro Acesso - Setup Automático
+
+Após o container iniciar pela primeira vez, o `postCreateCommand` executará:
+```bash
+cd /workspaces/project2025 && mvn clean install -DskipTests
+```
+
+Isso irá:
+- ✅ Baixar todas as dependências Spring Boot
+- ✅ Compilar o projeto
+- ✅ Preparar o ambiente para desenvolvimento
+
+**Aguarde a mensagem no terminal**: `BUILD SUCCESS`
+
+### 1.2. Verificar Spring Boot Beans
+
+Após o setup, os beans Spring Boot devem aparecer no autocomplete. Se não aparecerem:
+
+1. Execute o diagnóstico:
+```bash
+cd /workspaces/project2025
+./diagnostic.sh
+```
+
+2. Se necessário, force reload do Java Language Server:
+   - `Ctrl/Cmd+Shift+P` → **"Java: Clean Java Language Server Workspace"**
+   - `Ctrl/Cmd+Shift+P` → **"Developer: Reload Window"**
+
+3. Para mais ajuda, consulte: [`TROUBLESHOOTING_BEANS.md`](TROUBLESHOOTING_BEANS.md)
 
 ### 2. Verificar Status do Oracle
 ```bash

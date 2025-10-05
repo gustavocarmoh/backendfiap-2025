@@ -12,14 +12,14 @@ Este documento descreve o modelo lógico e físico do banco de dados Oracle impl
 
 ```
 ┌─────────────┐       ┌──────────────────┐       ┌─────────────────┐
-│   ROLES     │──────<│   USER_ROLES    │>──────│     USERS       │
+│   ROLES     │──────<│   USER_ROLES     │>──────│     USERS       │
 │             │       │                  │       │                 │
 │ - id        │       │ - user_id (FK)   │       │ - id (PK)       │
 │ - name      │       │ - role_id (FK)   │       │ - first_name    │
 └─────────────┘       └──────────────────┘       │ - last_name     │
-                                                  │ - email         │
-                                                  │ - password_hash │
-                                                  └─────────────────┘
+                                                 │ - email         │
+                                                 │ - password_hash │
+                                                 └─────────────────┘
                                                           │
                       ┌───────────────────────────────────┼─────────────────────────────┐
                       │                                   │                             │

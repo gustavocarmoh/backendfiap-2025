@@ -16,7 +16,7 @@ sleep 30
 # Função para executar SQL
 run_sql() {
     local sql="$1"
-    echo "$sql" | sqlplus -s sys/OraclePassword123@//localhost:1521/XE as sysdba
+    echo "$sql" | sqlplus -s sys/OraclePassword123@//localhost:1521/XEPDB1 as sysdba
 }
 
 echo "[2/5] Verificando se usuário nutrixpert já existe..."
@@ -62,7 +62,7 @@ echo "  Username: nutrixpert"
 echo "  Password: NutriXpert2025!"
 echo "  Schema: NUTRIXPERT"
 echo ""
-echo "JDBC URL: jdbc:oracle:thin:@localhost:1521:XE"
+echo "JDBC URL: jdbc:oracle:thin:@localhost:1521/XEPDB1"
 echo "Oracle EM Express: https://localhost:5500/em"
 echo ""
 echo "=========================================="

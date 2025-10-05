@@ -1,5 +1,6 @@
 /workspaces/project2025/src/test/java/fiap/backend/config/TestSecurityConfig.java
 /workspaces/project2025/src/test/java/fiap/backend/controller/ChatControllerTest.java
+/workspaces/project2025/src/test/java/fiap/backend/controller/OracleProcedureControllerTest.java
 /workspaces/project2025/src/test/java/fiap/backend/controller/SubscriptionControllerTest.java
 /workspaces/project2025/src/test/java/fiap/backend/controller/SubscriptionPlanControllerTest.java
 /workspaces/project2025/src/test/java/fiap/backend/domain/SubscriptionPlanTest.java
@@ -21,6 +22,7 @@
 /workspaces/project2025/src/test/java/fiap/backend/service/CurrentUserServiceTest.java
 /workspaces/project2025/src/test/java/fiap/backend/service/CurrentUserServiceTokenTest.java
 /workspaces/project2025/src/test/java/fiap/backend/service/NutritionPlanServiceTest.java
+/workspaces/project2025/src/test/java/fiap/backend/service/OracleStoredProcedureServiceTest.java
 /workspaces/project2025/src/test/java/fiap/backend/service/ServiceProviderServiceTest.java
 /workspaces/project2025/src/test/java/fiap/backend/service/SubscriptionPlanServiceImplTest.java
 /workspaces/project2025/src/test/java/fiap/backend/service/SubscriptionServiceImplTest.java

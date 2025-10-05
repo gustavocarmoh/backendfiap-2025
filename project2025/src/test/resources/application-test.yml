@@ -12,12 +12,12 @@ spring:
   flyway:
     enabled: false
     
-app:
-  jwt:
-    secret: test-secret-key-for-testing-purposes-only-do-not-use-in-production-environment
-    expiration: 86400000
+# app:
+#   jwt:
+#     secret: test-secret-key-for-testing-purposes-only-do-not-use-in-production-environment
+#     expiration: 86400000
 
 logging:
   level:
-    org.hibernate.SQL: DEBUG
-    org.springframework.security: DEBUG
+    [org.hibernate.SQL]: DEBUG
+    [org.springframework.security]: DEBUG

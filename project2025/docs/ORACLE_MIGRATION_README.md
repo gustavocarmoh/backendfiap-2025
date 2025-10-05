@@ -88,7 +88,7 @@ Controller REST com endpoints:
 
 2. **Variáveis de Ambiente**
 ```bash
-export SPRING_DATASOURCE_URL="jdbc:oracle:thin:@localhost:1521:XE"
+export SPRING_DATASOURCE_URL="jdbc:oracle:thin:@oracle:1521/XEPDB1"
 export SPRING_DATASOURCE_USERNAME="seu_usuario"
 export SPRING_DATASOURCE_PASSWORD="sua_senha"
 export ORACLE_SCHEMA="NUTRIXPERT"

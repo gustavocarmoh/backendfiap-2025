@@ -3,12 +3,15 @@ FROM mcr.microsoft.com/devcontainers/java:1-21
 
 USER root
 
-# Utilitários extras + Oracle dependencies
+# Utilitários extras + Oracle dependencies + Maven
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    netcat-openbsd curl ca-certificates wget unzip libaio1 alien \
+    netcat-openbsd curl ca-certificates wget unzip libaio1 alien maven \
     && rm -rf /var/lib/apt/lists/*
+
+# Verificar instalação Maven
+RUN mvn --version
 
 # Instalar Oracle Instant Client 21c (Basic + SQLPlus)
 # Necessário para ferramentas de linha de comando Oracle
@@ -36,6 +39,7 @@ WORKDIR /workspaces
 
 ENV MAVEN_CONFIG=/home/vscode/.m2 \
     JAVA_TOOL_OPTIONS="-XX:+UseZGC -Dfile.encoding=UTF-8 -Duser.timezone=America/Sao_Paulo"
+RUN chown -R vscode:vscode /home/vscode/.m2
 
 EXPOSE 8000 5005
 SHELL ["/bin/bash", "-lc"]

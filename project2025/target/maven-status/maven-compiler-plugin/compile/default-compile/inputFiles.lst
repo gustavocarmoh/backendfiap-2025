@@ -11,6 +11,7 @@
 /workspaces/project2025/src/main/java/fiap/backend/controller/ChatController.java
 /workspaces/project2025/src/main/java/fiap/backend/controller/DocumentationController.java
 /workspaces/project2025/src/main/java/fiap/backend/controller/NutritionPlanController.java
+/workspaces/project2025/src/main/java/fiap/backend/controller/OracleProcedureController.java
 /workspaces/project2025/src/main/java/fiap/backend/controller/PhotoResourceController.java
 /workspaces/project2025/src/main/java/fiap/backend/controller/ServiceProviderController.java
 /workspaces/project2025/src/main/java/fiap/backend/controller/SpringDocController.java
@@ -28,6 +29,8 @@
 /workspaces/project2025/src/main/java/fiap/backend/domain/User.java
 /workspaces/project2025/src/main/java/fiap/backend/domain/UserPhoto.java
 /workspaces/project2025/src/main/java/fiap/backend/dto/AdminDashboardDTO.java
+/workspaces/project2025/src/main/java/fiap/backend/dto/AnaliseNutricionalRequest.java
+/workspaces/project2025/src/main/java/fiap/backend/dto/AnaliseNutricionalResponse.java
 /workspaces/project2025/src/main/java/fiap/backend/dto/AuthResponse.java
 /workspaces/project2025/src/main/java/fiap/backend/dto/ChatHistoryDTO.java
 /workspaces/project2025/src/main/java/fiap/backend/dto/ChatRequestDTO.java
@@ -62,6 +65,7 @@
 /workspaces/project2025/src/main/java/fiap/backend/service/ChatService.java
 /workspaces/project2025/src/main/java/fiap/backend/service/CurrentUserService.java
 /workspaces/project2025/src/main/java/fiap/backend/service/NutritionPlanService.java
+/workspaces/project2025/src/main/java/fiap/backend/service/OracleStoredProcedureService.java
 /workspaces/project2025/src/main/java/fiap/backend/service/ServiceProviderService.java
 /workspaces/project2025/src/main/java/fiap/backend/service/SubscriptionPlanService.java
 /workspaces/project2025/src/main/java/fiap/backend/service/SubscriptionPlanServiceImpl.java

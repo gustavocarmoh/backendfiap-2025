@@ -1,16 +1,11 @@
 {
-   "name":"project2025 (Java 21)",
+   "name":"project2025 (Java 21 + Oracle)",
    "dockerComposeFile":"docker-compose.yml",
    "service":"app",
    "workspaceFolder":"/workspaces",
    "overrideCommand":true,
-   // "features":{
-   //    "ghcr.io/devcontainers/features/maven:1":{
-   //       "version":"latest"
-   //    }
-   // },
-  //  "postCreateCommand":"mvn -q -DskipTests dependency:go-offline",
-  //  "postStartCommand":"bash -lc 'wait-for-it postgres:5433 -- mvn -q org.springframework.boot:spring-boot-maven-plugin:3.3.2:run -Dspring-boot.run.jvmArguments=\"${SPRING_BOOT_JVM_ARGS}\"'",
+   "postCreateCommand":"cd /workspaces/project2025 && mvn clean install -DskipTests",
+   "postAttachCommand":"echo 'DevContainer pronto! Use: cd project2025 && mvn spring-boot:run'",
    "forwardPorts":[
       8000,
       5005,
@@ -43,10 +38,28 @@
                   "default":true
                }
             ],
+            "java.configuration.updateBuildConfiguration":"automatic",
             "java.import.maven.enabled":true,
             "java.import.gradle.enabled":false,
+            "java.autobuild.enabled":true,
+            "java.completion.favoriteStaticMembers":[
+               "org.junit.jupiter.api.Assertions.*",
+               "org.mockito.Mockito.*",
+               "org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*",
+               "org.springframework.test.web.servlet.result.MockMvcResultMatchers.*"
+            ],
             "spring-boot.ls.java.home":"${env:JAVA_HOME}",
-            "maven.executable.path":"/usr/bin/mvn"
+            "spring-boot.ls.checkJVM":false,
+            "spring.initializr.defaultLanguage":"Java",
+            "maven.executable.path":"/usr/bin/mvn",
+            "maven.terminal.useJavaHome":true,
+            "maven.view":"hierarchical",
+            "files.exclude":{
+               "**/.classpath":true,
+               "**/.project":true,
+               "**/.settings":true,
+               "**/.factorypath":true
+            }
          }
       }
    },
