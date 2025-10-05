@@ -47,6 +47,7 @@
 /workspaces/project2025/src/main/java/fiap/backend/dto/SubscriptionResponse.java
 /workspaces/project2025/src/main/java/fiap/backend/dto/SubscriptionStatusUpdateRequest.java
 /workspaces/project2025/src/main/java/fiap/backend/dto/UpdateNutritionPlanDTO.java
+/workspaces/project2025/src/main/java/fiap/backend/dto/UserListResponse.java
 /workspaces/project2025/src/main/java/fiap/backend/dto/UserLoginRequest.java
 /workspaces/project2025/src/main/java/fiap/backend/dto/UserPhotoResponse.java
 /workspaces/project2025/src/main/java/fiap/backend/dto/UserPhotoUploadRequest.java

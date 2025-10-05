@@ -1,13 +1,17 @@
 fiap/backend/dto/SubscriptionPlanResponseTest.class
 fiap/backend/controller/OracleProcedureControllerTest.class
 fiap/backend/dto/UserUpdateRequestTest.class
+fiap/backend/controller/ChatControllerRefactoredTest.class
 fiap/backend/dto/SubscriptionPlanRequestTest.class
+fiap/backend/util/TestDataFactory.class
 fiap/backend/dto/SubscriptionStatusUpdateRequestTest.class
 fiap/backend/domain/SubscriptionPlanTest.class
 fiap/backend/test/AuthIntegrationTest.class
 fiap/backend/service/CurrentUserServicePlanTest.class
 fiap/backend/controller/ChatControllerTest.class
+fiap/backend/controller/ChatControllerRefactoredTest$IntegrationTests.class
 fiap/backend/test/SubscriptionIntegrationTest.class
+fiap/backend/controller/ChatControllerRefactoredTest$ChatHistoryTests.class
 fiap/backend/dto/UserRegisterRequestTest.class
 fiap/backend/service/CurrentUserServiceTokenTest.class
 fiap/backend/service/OracleStoredProcedureServiceTest$1.class
@@ -27,6 +31,8 @@ fiap/backend/service/ServiceProviderServiceTest.class
 fiap/backend/config/TestSecurityConfig.class
 fiap/backend/service/OracleStoredProcedureServiceTest$3.class
 fiap/backend/service/AdminDashboardServiceTest.class
+fiap/backend/controller/ChatControllerRefactoredTest$SendMessageTests.class
+fiap/backend/util/TestConstants.class
 fiap/backend/service/SubscriptionServiceImplTest.class
 fiap/backend/service/OracleStoredProcedureServiceTest$2.class
 fiap/backend/dto/AuthResponseTest.class

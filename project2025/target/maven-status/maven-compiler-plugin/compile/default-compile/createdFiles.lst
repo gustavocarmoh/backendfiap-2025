@@ -77,6 +77,7 @@ fiap/backend/service/ChatService$1.class
 fiap/backend/service/SubscriptionService.class
 fiap/backend/service/AuthServiceImpl.class
 fiap/backend/dto/SubscriptionRequest.class
+fiap/backend/dto/UserListResponse.class
 fiap/backend/App.class
 fiap/backend/repository/UserPhotoRepository.class
 fiap/backend/service/CurrentUserService.class

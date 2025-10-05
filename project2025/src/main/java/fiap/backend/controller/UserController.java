@@ -1,5 +1,7 @@
 package fiap.backend.controller;
 
+import fiap.backend.domain.User;
+import fiap.backend.dto.UserListResponse;
 import fiap.backend.dto.UserRegisterRequest;
 import fiap.backend.dto.UserUpdateRequest;
 import fiap.backend.service.AuthServiceImpl;
@@ -15,6 +17,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/v1/users")
 @Tag(name = "Gestão de Usuários", description = "APIs para gerenciar perfis e dados dos usuários")
@@ -25,6 +31,34 @@ public class UserController {
 
     public UserController(AuthServiceImpl authService) {
         this.authService = authService;
+    }
+
+    @GetMapping
+    @Operation(summary = "Listar todos os usuários", description = "Retorna uma lista com todos os usuários cadastrados no sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Não autorizado")
+    })
+    public ResponseEntity<List<UserListResponse>> getAllUsers() {
+        List<User> users = authService.getAllUsers();
+        
+        // Mapear para DTO com userId incluso
+        List<UserListResponse> response = users.stream()
+                .map(user -> {
+                    UserListResponse dto = new UserListResponse();
+                    dto.setUserId(user.getId());
+                    dto.setEmail(user.getEmail());
+                    dto.setFirstName(user.getFirstName());
+                    dto.setLastName(user.getLastName());
+                    dto.setFullName(user.getFirstName() + " " + user.getLastName());
+                    dto.setRoles(user.getRoleNames());
+                    dto.setCreatedAt(user.getCreatedAt());
+                    dto.setIsActive(true); // Você pode adicionar lógica de status se necessário
+                    return dto;
+                })
+                .collect(Collectors.toList());
+        
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
@@ -87,6 +121,13 @@ public class UserController {
     public ResponseEntity<?> updateMyProfile(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody UserUpdateRequest request) {
+        
+        // Validar se o usuário está autenticado
+        if (userDetails == null) {
+            return ResponseEntity.status(401)
+                    .body(Map.of("error", "Usuário não autenticado"));
+        }
+        
         var updatedUser = authService.updateMyProfile(userDetails.getUsername(), request);
         return ResponseEntity.ok(updatedUser);
     }

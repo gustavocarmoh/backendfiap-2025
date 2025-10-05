@@ -191,4 +191,13 @@ public class AuthServiceImpl {
         user.setRolesByNames(Collections.singleton("ADMIN"));
         userRepository.save(user);
     }
+
+    /**
+     * Lista todos os usuários do sistema
+     * 
+     * @return lista de todos os usuários
+     */
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
 }

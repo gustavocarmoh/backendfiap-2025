@@ -29,7 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/oracle")
 @Tag(name = "Oracle PL/SQL", description = "Endpoints para execução de Functions e Procedures Oracle PL/SQL")
-@SecurityRequirement(name = "bearer-jwt")
+// @SecurityRequirement(name = "bearerAuth")
 public class OracleProcedureController {
 
     private static final Logger logger = LoggerFactory.getLogger(OracleProcedureController.class);
@@ -44,7 +44,7 @@ public class OracleProcedureController {
      * Calcula o indicador de saúde do usuário
      */
     @GetMapping("/indicador-saude/{userId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
+    // @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     @Operation(
         summary = "Calcular Indicador de Saúde",
         description = "Executa a function PL/SQL calcular_indicador_saude_usuario para obter score de saúde nutricional (0-100)"
@@ -97,7 +97,7 @@ public class OracleProcedureController {
      * Gera relatório formatado de nutrição
      */
     @GetMapping(value = "/relatorio-nutricao/{userId}", produces = MediaType.TEXT_PLAIN_VALUE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
+    // @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     @Operation(
         summary = "Gerar Relatório de Nutrição",
         description = "Executa a function PL/SQL formatar_relatorio_nutricao para gerar relatório formatado em texto"
@@ -143,7 +143,7 @@ public class OracleProcedureController {
      * Registra alertas nutricionais para o usuário
      */
     @PostMapping("/alertas-nutricionais/{userId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
+    // @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     @Operation(
         summary = "Registrar Alertas Nutricionais",
         description = "Executa a procedure PL/SQL proc_registrar_alerta_nutricional para analisar e registrar alertas"
@@ -185,7 +185,7 @@ public class OracleProcedureController {
      * Gera relatório detalhado de consumo
      */
     @PostMapping("/relatorio-consumo")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
+    // @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     @Operation(
         summary = "Gerar Relatório de Consumo",
         description = "Executa a procedure PL/SQL proc_gerar_relatorio_consumo para gerar relatório detalhado"
@@ -225,7 +225,7 @@ public class OracleProcedureController {
      * Executa análise completa (combina function e procedures)
      */
     @PostMapping("/analise-completa/{userId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
+    // @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     @Operation(
         summary = "Executar Análise Completa",
         description = "Combina function e procedures PL/SQL para análise completa do usuário: " +
@@ -272,7 +272,7 @@ public class OracleProcedureController {
      * Obtém estatísticas básicas do usuário
      */
     @GetMapping("/estatisticas/{userId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
+    // @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     @Operation(
         summary = "Obter Estatísticas Básicas",
         description = "Retorna estatísticas básicas do usuário usando consulta SQL direta"
