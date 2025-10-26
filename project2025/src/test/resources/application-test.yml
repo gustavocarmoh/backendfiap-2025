@@ -19,5 +19,5 @@ spring:
 
 logging:
   level:
-    [org.hibernate.SQL]: DEBUG
-    [org.springframework.security]: DEBUG
+    "org.hibernate.SQL": DEBUG
+    "org.springframework.security": DEBUG

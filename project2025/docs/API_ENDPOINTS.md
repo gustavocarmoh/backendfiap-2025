@@ -1033,3 +1033,36 @@ echo "Todos os testes concluídos!"
 **API NutriXpert - Documentação Completa de Endpoints 🚀**
 
 > 💡 **Dica**: Use o Swagger UI em `/swagger-ui.html` para testar os endpoints interativamente!
+
+---
+
+# Endpoints Oracle PL/SQL — NutriXpert
+
+## Functions
+
+- `GET /api/v1/oracle/indicador-saude/{userId}?dias=30`  
+  → Calcula score de saúde do usuário (function)
+
+- `GET /api/v1/oracle/relatorio-nutricao/{userId}`  
+  → Gera relatório nutricional formatado (function)
+
+## Procedures
+
+- `POST /api/v1/oracle/alertas-nutricionais/{userId}?dias=7`  
+  → Registra alertas nutricionais automáticos (procedure)
+
+- `POST /api/v1/oracle/relatorio-consumo/{userId}`  
+  → Gera relatório semanal de consumo (procedure)
+
+- `GET /api/v1/oracle/planos-dinamicos?where=plan_date >= SYSDATE - 7`  
+  → Consulta dinâmica de planos nutricionais (procedure com Dynamic SQL)
+
+## Auditoria (Triggers)
+
+- `GET /api/v1/oracle/auditoria/planos`  
+  → Consulta registros de auditoria de alterações em planos nutricionais (trigger)
+
+---
+
+**Valor agregado:**  
+Esses endpoints permitem consumir diretamente toda a lógica Oracle (functions, procedures, triggers), garantindo flexibilidade, rastreabilidade e automação para o sistema NutriXpert.

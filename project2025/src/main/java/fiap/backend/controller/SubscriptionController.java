@@ -54,6 +54,17 @@ public class SubscriptionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(subscription);
     }
 
+    // Permite ADMIN criar subscrição em nome de um usuário (UUID passado)
+    @PostMapping("/user/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Criar subscrição em nome de usuário (Admin)", description = "Admin cria subscrição para usuário especificado")
+    public ResponseEntity<SubscriptionResponse> createSubscriptionForUser(
+            @PathVariable UUID userId,
+            @Valid @RequestBody SubscriptionRequest request) {
+        SubscriptionResponse subscription = subscriptionService.createSubscription(userId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(subscription);
+    }
+
     @GetMapping
     @Operation(summary = "Listar subscrições do usuário", description = "Retorna todas as subscrições do usuário autenticado")
     @ApiResponses(value = {
@@ -65,6 +76,15 @@ public class SubscriptionController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<List<SubscriptionResponse>> getUserSubscriptions() {
         UUID userId = currentUserService.getCurrentUserId();
+        List<SubscriptionResponse> subscriptions = subscriptionService.getSubscriptionsByUserId(userId);
+        return ResponseEntity.ok(subscriptions);
+    }
+
+    // Permite ADMIN listar subscrições de um usuário pelo UUID
+    @GetMapping("/user/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Listar subscrições de um usuário (Admin)", description = "Retorna todas as subscrições de um usuário específico")
+    public ResponseEntity<List<SubscriptionResponse>> getSubscriptionsByUserIdAdmin(@PathVariable UUID userId) {
         List<SubscriptionResponse> subscriptions = subscriptionService.getSubscriptionsByUserId(userId);
         return ResponseEntity.ok(subscriptions);
     }
@@ -156,6 +176,17 @@ public class SubscriptionController {
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<SubscriptionResponse> cancelSubscription(@PathVariable UUID id) {
         UUID userId = currentUserService.getCurrentUserId();
+        SubscriptionResponse subscription = subscriptionService.cancelSubscription(id, userId);
+        return ResponseEntity.ok(subscription);
+    }
+
+    // Permite ADMIN cancelar uma subscrição passando o UUID do usuário (executa service com o userId fornecido)
+    @PatchMapping("/{id}/cancel/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Cancelar subscrição em nome de usuário (Admin)", description = "Admin cancela subscrição informando o userId do proprietário")
+    public ResponseEntity<SubscriptionResponse> cancelSubscriptionAsAdmin(
+            @PathVariable UUID id,
+            @PathVariable UUID userId) {
         SubscriptionResponse subscription = subscriptionService.cancelSubscription(id, userId);
         return ResponseEntity.ok(subscription);
     }

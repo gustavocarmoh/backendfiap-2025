@@ -100,19 +100,25 @@ public class UserPhotoController {
             Optional<UserPhoto> userPhoto = userPhotoService.getUserPhoto(currentUserId);
 
             if (userPhoto.isPresent()) {
-                UserPhoto photo = userPhoto.get();
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.parseMediaType(photo.getContentType()));
-                headers.setContentLength(photo.getPhotoData().length);
-                headers.setCacheControl("max-age=3600"); // Cache por 1 hora
-
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(photo.getPhotoData());
+                return buildPhotoResponse(userPhoto.get());
             } else {
                 return ResponseEntity.notFound().build();
             }
 
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // Novo endpoint ADMIN: obter foto de outro usuário pelo UUID
+    @GetMapping("/user/{userId}/my-photo")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Obter foto de usuário (Admin)", description = "Retorna a foto de perfil de outro usuário (apenas ADMIN)")
+    public ResponseEntity<byte[]> getUserPhotoAsAdmin(
+            @Parameter(description = "UUID do usuário") @PathVariable UUID userId) {
+        try {
+            Optional<UserPhoto> userPhoto = userPhotoService.getUserPhoto(userId);
+            return userPhoto.map(this::buildPhotoResponse).orElseGet(() -> ResponseEntity.notFound().build());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -138,15 +144,7 @@ public class UserPhotoController {
             Optional<UserPhoto> userPhoto = userPhotoService.getPhotoById(photoId);
 
             if (userPhoto.isPresent()) {
-                UserPhoto photo = userPhoto.get();
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.parseMediaType(photo.getContentType()));
-                headers.setContentLength(photo.getPhotoData().length);
-                headers.setCacheControl("max-age=3600"); // Cache por 1 hora
-
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(photo.getPhotoData());
+                return buildPhotoResponse(userPhoto.get());
             } else {
                 return ResponseEntity.notFound().build();
             }
@@ -180,6 +178,24 @@ public class UserPhotoController {
                 return ResponseEntity.badRequest().body(response);
             }
 
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(UserPhotoResponse.error("Erro interno: " + e.getMessage()));
+        }
+    }
+
+    // Novo endpoint ADMIN: remover foto de outro usuário pelo UUID
+    @DeleteMapping("/user/{userId}/my-photo")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Remover foto de usuário (Admin)", description = "Remove a foto de perfil de outro usuário (apenas ADMIN)")
+    public ResponseEntity<UserPhotoResponse> deleteUserPhotoAsAdmin(@PathVariable UUID userId) {
+        try {
+            UserPhotoResponse response = userPhotoService.deleteUserPhoto(userId);
+            if (response.isSuccess()) {
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.badRequest().body(response);
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(UserPhotoResponse.error("Erro interno: " + e.getMessage()));
@@ -221,22 +237,27 @@ public class UserPhotoController {
         }
     }
 
-    /**
-     * Endpoint administrativo para obter estatísticas de armazenamento
-     * 
-     * @return estatísticas de uso de storage
-     */
-    @GetMapping("/admin/stats")
+    // Novo endpoint ADMIN: obter status/meta da foto para um userId
+    @GetMapping("/status/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Estatísticas de fotos (Admin)", description = "Retorna estatísticas de uso de armazenamento de fotos (apenas administradores)")
-    public ResponseEntity<Map<String, Object>> getStorageStats() {
+    @Operation(summary = "Status da foto de usuário (Admin)", description = "Retorna status/meta da foto de outro usuário (apenas ADMIN)")
+    public ResponseEntity<Map<String, Object>> getPhotoStatusForUser(@PathVariable UUID userId) {
         try {
-            UserPhotoService.PhotoStorageStats stats = userPhotoService.getStorageStats();
-
             Map<String, Object> response = new HashMap<>();
-            response.put("totalPhotos", stats.getTotalPhotos());
-            response.put("totalStorageBytes", stats.getTotalStorageBytes());
-            response.put("totalStorageMB", Math.round(stats.getTotalStorageMB() * 100.0) / 100.0);
+            response.put("hasPhoto", userPhotoService.userHasPhoto(userId));
+
+            Optional<UserPhoto> metadata = userPhotoService.getPhotoMetadata(userId);
+            if (metadata.isPresent()) {
+                UserPhoto photo = metadata.get();
+                response.put("fileName", photo.getFileName());
+                response.put("contentType", photo.getContentType());
+                response.put("fileSize", photo.getFileSize());
+                response.put("uploadedAt", photo.getCreatedAt());
+                response.put("updatedAt", photo.getUpdatedAt());
+                response.put("photoUrl", "/api/v1/user/photo/" + photo.getId());
+            } else {
+                response.put("photoUrl", userPhotoService.getDefaultPhotoUrl());
+            }
 
             return ResponseEntity.ok(response);
 
@@ -245,5 +266,20 @@ public class UserPhotoController {
             errorResponse.put("error", "Erro interno: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
+    }
+
+    // Refatoração: helper para criar headers de resposta de foto (remove duplicação)
+    private HttpHeaders buildPhotoHeaders(UserPhoto photo) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(photo.getContentType()));
+        headers.setContentLength(photo.getPhotoData().length);
+        headers.setCacheControl("max-age=3600");
+        return headers;
+    }
+
+    // Refatoração: helper para retornar payload de imagem
+    private ResponseEntity<byte[]> buildPhotoResponse(UserPhoto photo) {
+        HttpHeaders headers = buildPhotoHeaders(photo);
+        return ResponseEntity.ok().headers(headers).body(photo.getPhotoData());
     }
 }

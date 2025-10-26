@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -271,5 +273,80 @@ public class OracleStoredProcedureService {
             logger.error("Erro ao obter estatísticas básicas: {}", e.getMessage(), e);
             return new HashMap<>();
         }
+    }
+
+    // Function: calcular_indicador_saude_usuario
+    public Double calcularIndicadorSaudeUsuario(String userId, int diasAnalise) {
+        String sql = "SELECT pkg_nutrixpert_func.calcular_indicador_saude_usuario(?, ?) FROM DUAL";
+        return jdbcTemplate.queryForObject(sql, Double.class, userId, diasAnalise);
+    }
+
+    // Function: formatar_relatorio_nutricao
+    public String formatarRelatorioNutricao(String userId) {
+        String sql = "SELECT pkg_nutrixpert_func.formatar_relatorio_nutricao(?) FROM DUAL";
+        return jdbcTemplate.queryForObject(sql, String.class, userId);
+    }
+
+    // Procedure: proc_registrar_alerta_nutricional
+    public int registrarAlertaNutricional(String userId, int diasAnalise) {
+        try (Connection conn = dataSource.getConnection();
+             CallableStatement stmt = conn.prepareCall("{CALL pkg_nutrixpert_proc.proc_registrar_alerta_nutricional(?, ?, ?)}")) {
+            stmt.setString(1, userId);
+            stmt.setInt(2, diasAnalise);
+            stmt.registerOutParameter(3, java.sql.Types.INTEGER);
+            stmt.execute();
+            return stmt.getInt(3);
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao registrar alerta nutricional", e);
+        }
+    }
+
+    // Procedure: proc_gerar_relatorio_consumo
+    public Map<String, Object> gerarRelatorioConsumo(String userId) {
+        Map<String, Object> result = new HashMap<>();
+        try (Connection conn = dataSource.getConnection();
+             CallableStatement stmt = conn.prepareCall("{CALL pkg_nutrixpert_proc.proc_gerar_relatorio_consumo(?, ?, ?)}")) {
+            stmt.setString(1, userId);
+            stmt.registerOutParameter(2, java.sql.Types.CLOB);
+            stmt.registerOutParameter(3, java.sql.Types.INTEGER);
+            stmt.execute();
+            String relatorio = stmt.getString(2);
+            int totalDias = stmt.getInt(3);
+            result.put("relatorio", relatorio);
+            result.put("totalDias", totalDias);
+            return result;
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao gerar relatório de consumo", e);
+        }
+    }
+
+    // Procedure: proc_consulta_dinamica_planos (Dynamic SQL)
+    public List<Map<String, Object>> consultaDinamicaPlanos(String where) {
+        List<Map<String, Object>> planos = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection();
+             CallableStatement stmt = conn.prepareCall("{CALL pkg_nutrixpert_proc.proc_consulta_dinamica_planos(?, ?)}")) {
+            stmt.setString(1, where);
+            stmt.registerOutParameter(2, oracle.jdbc.OracleTypes.CURSOR);
+            stmt.execute();
+            try (ResultSet rs = (ResultSet) stmt.getObject(2)) {
+                ResultSetMetaData meta = rs.getMetaData();
+                while (rs.next()) {
+                    Map<String, Object> row = new HashMap<>();
+                    for (int i = 1; i <= meta.getColumnCount(); i++) {
+                        row.put(meta.getColumnName(i), rs.getObject(i));
+                    }
+                    planos.add(row);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro na consulta dinâmica de planos", e);
+        }
+        return planos;
+    }
+
+    // Auditoria: consultar registros da trigger
+    public List<Map<String, Object>> consultarAuditoriaPlanos() {
+        String sql = "SELECT * FROM nutrition_plans_audit ORDER BY changed_at DESC FETCH FIRST 50 ROWS ONLY";
+        return jdbcTemplate.queryForList(sql);
     }
 }

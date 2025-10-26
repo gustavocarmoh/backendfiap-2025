@@ -1,0 +1,60 @@
+name: CI/CD NutriXpert
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Instalar Maven
+        run: sudo apt-get update && sudo apt-get install -y maven
+
+      - name: Instalar dependências
+        run: mvn clean install -DskipTests
+        working-directory: project2025
+
+      - name: Rodar testes
+        run: mvn test
+        working-directory: project2025
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.OCR_REPO }}/nutrixpert-api:latest ./project2025
+
+      - name: Login no Oracle Cloud Registry (OCR)
+        run: |
+          echo "${{ secrets.OCR_PASSWORD }}" | docker login ${{ secrets.OCR_REGISTRY }} -u "${{ secrets.OCR_USERNAME }}" --password-stdin
+
+      - name: Push Docker image para OCR
+        run: |
+          docker push ${{ secrets.OCR_REPO }}/nutrixpert-api:latest
+
+      - name: Deploy & Start container (OCR)
+        run: |
+          docker pull ${{ secrets.OCR_REPO }}/nutrixpert-api:latest
+          docker stop nutrixpert-api || true
+          docker rm nutrixpert-api || true
+          docker run -d --name nutrixpert-api \
+            -p 8000:8000 \
+            -e SPRING_DATASOURCE_URL="jdbc:oracle:thin:@oracle:1521/XEPDB1" \
+            -e SPRING_DATASOURCE_USERNAME="nutrixpert" \
+            -e SPRING_DATASOURCE_PASSWORD="NutriXpert2025!" \
+            -e SPRING_PROFILES_ACTIVE="dev" \
+            ${{ secrets.OCR_REPO }}/nutrixpert-api:latest
+
+      - name: Logout OCR
+        run: docker logout ${{ secrets.OCR_REGISTRY }}

@@ -3,6 +3,7 @@ package fiap.backend.controller;
 import fiap.backend.dto.AnaliseNutricionalRequest;
 import fiap.backend.dto.AnaliseNutricionalResponse;
 import fiap.backend.service.OracleStoredProcedureService;
+import fiap.backend.service.llm.LlmService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,9 @@ class OracleProcedureControllerTest {
 
     @Mock
     private OracleStoredProcedureService oracleService;
+
+    @Mock
+    private LlmService llmService; // <--- adiciona mock do LLM para injeção
 
     @InjectMocks
     private OracleProcedureController controller;
@@ -121,7 +125,7 @@ class OracleProcedureControllerTest {
             .thenReturn(80.0);
 
         // Act
-        ResponseEntity<Map<String, Object>> response = controller.calcularIndicadorSaude(USER_ID, null);
+        ResponseEntity<Map<String, Object>> response = controller.calcularIndicadorSaude(USER_ID, 30);
 
         // Assert
         assertNotNull(response);
@@ -156,16 +160,16 @@ class OracleProcedureControllerTest {
         LocalDate dataFim = LocalDate.of(2025, 9, 30);
         String relatorioEsperado = "RELATÓRIO DE NUTRIÇÃO\n===================\nDados do período...";
         
-        when(oracleService.formatarRelatorioNutricao(USER_ID, dataInicio, dataFim))
+        when(oracleService.formatarRelatorioNutricao(eq(USER_ID), eq(dataInicio), eq(dataFim)))
             .thenReturn(relatorioEsperado);
 
         // Act
-        ResponseEntity<String> response = controller.gerarRelatorioNutricao(USER_ID, dataInicio, dataFim);
+        ResponseEntity<String> response = controller.gerarRelatorioNutricao(USER_ID);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(relatorioEsperado, response.getBody());
-        verify(oracleService, times(1)).formatarRelatorioNutricao(USER_ID, dataInicio, dataFim);
+        verify(oracleService, times(1)).formatarRelatorioNutricao(eq(USER_ID), eq(dataInicio), eq(dataFim));
     }
 
     @Test
@@ -177,7 +181,7 @@ class OracleProcedureControllerTest {
             .thenReturn(relatorio);
 
         // Act
-        ResponseEntity<String> response = controller.gerarRelatorioNutricao(USER_ID, null, null);
+        ResponseEntity<String> response = controller.gerarRelatorioNutricao(USER_ID);
 
         // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -193,7 +197,7 @@ class OracleProcedureControllerTest {
             .thenThrow(new RuntimeException("Erro ao gerar CLOB"));
 
         // Act
-        ResponseEntity<String> response = controller.gerarRelatorioNutricao(USER_ID, null, null);
+        ResponseEntity<String> response = controller.gerarRelatorioNutricao(USER_ID);
 
         // Assert
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
@@ -249,7 +253,7 @@ class OracleProcedureControllerTest {
             .thenReturn(2);
 
         // Act
-        controller.registrarAlertasNutricionais(USER_ID, null);
+        controller.registrarAlertasNutricionais(USER_ID, 7);
 
         // Assert
         verify(oracleService, times(1)).registrarAlertasNutricionais(USER_ID, 7);

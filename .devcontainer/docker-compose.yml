@@ -15,10 +15,11 @@ services:
       - 1521:1521  # Oracle Database
       - 5500:5500  # Oracle Enterprise Manager Express
     healthcheck:
-      test: ["CMD", "sqlplus", "-L", "sys/OraclePassword123@//localhost:1521/XE as sysdba", "@/dev/null"]
+      # Usar SERVICE_NAME XEPDB1 (consistente com init-oracle.sh e application-dev.yml)
+      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s sys/OraclePassword123@//localhost:1521/XEPDB1 as sysdba >/dev/null 2>&1"]
       interval: 30s
       timeout: 10s
-      retries: 5
+      retries: 10
       start_period: 120s
 
   app:

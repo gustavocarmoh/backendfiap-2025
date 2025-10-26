@@ -6,26 +6,30 @@ spring:
     name: nutrixpert-api
 
   datasource:
-    url: jdbc:oracle:thin:@oracle:1521/XEPDB1
-    username: nutrixpert
-    password: NutriXpert2025!
+    # Default alinhado ao docker-compose (service name: oracle, service/SID: XEPDB1)
+    url: ${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@oracle:1521/XEPDB1}
+    username: ${SPRING_DATASOURCE_USERNAME:nutrixpert}
+    password: ${SPRING_DATASOURCE_PASSWORD:NutriXpert2025!}
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:
       initialization-fail-timeout: 120000
+      connection-test-query: "SELECT 1 FROM DUAL"
+      connection-timeout: 30000
+      validation-timeout: 5000
+      max-lifetime: 1800000
+      minimum-idle: 2
+      maximum-pool-size: 10
+      leak-detection-threshold: 2000
 
   jpa:
     hibernate:
-      ddl-auto: none   # use migrações (Flyway). Se quiser gerar esquema em dev: update
+      ddl-auto: none
     open-in-view: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
         jdbc.lob.non_contextual_creation: true
-  # Devtools para hot reload
-  devtools:
-    restart:
-      enabled: true
 
   flyway:
     enabled: true
@@ -44,7 +48,6 @@ management:
     flyway:
       enabled: true
 
-# Configurações do Swagger/OpenAPI
 springdoc:
   api-docs:
     path: /api-docs
@@ -54,6 +57,17 @@ springdoc:
     operationsSorter: method
     tagsSorter: alpha
   show-actuator: true
+
+llm:
+  api:
+    url: ${LLM_API_URL:https://api.openai.com/v1/chat/completions}
+    key: ${LLM_API_KEY:}
+    model: ${LLM_MODEL:gpt-4o-mini}
+  optimization:
+    model: ${LLM_OPTIMIZATION_MODEL:${LLM_MODEL:gpt-4o-mini}}
+  request:
+    timeout:
+      seconds: ${LLM_REQUEST_TIMEOUT_SECONDS:30}
 
 logging:
   level:
