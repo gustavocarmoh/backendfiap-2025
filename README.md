@@ -225,15 +225,12 @@ Leia mais: [.devcontainer/README-devcontainer.md](.devcontainer/README-devcontai
 
 ## 📚 Documentação
 
-### Guias Principais
-
-| Documento | Descrição |
-|-----------|-----------|
-| [ORACLE_DATABASE_MODEL.md](project2025/docs/ORACLE_DATABASE_MODEL.md) | Modelo de dados completo com DER |
-| [ORACLE_PLSQL_GUIDE.md](project2025/docs/ORACLE_PLSQL_GUIDE.md) | 32 exemplos práticos de PL/SQL |
-| [ORACLE_MIGRATION_README.md](project2025/docs/ORACLE_MIGRATION_README.md) | Guia de migração PostgreSQL→Oracle |
-| [ORACLE_DEPLOYMENT_GUIDE.md](project2025/docs/ORACLE_DEPLOYMENT_GUIDE.md) | Deploy em produção |
-| [ORACLE_MIGRATION_SUMMARY.md](project2025/ORACLE_MIGRATION_SUMMARY.md) | Resumo executivo do projeto |
+- **AI Use Cases & Impact**: ./project2025/docs/AI_USE_CASES_AND_IMPACT.md
+- [ORACLE_DATABASE_MODEL.md](project2025/docs/ORACLE_DATABASE_MODEL.md) | Modelo de dados completo com DER |
+- [ORACLE_PLSQL_GUIDE.md](project2025/docs/ORACLE_PLSQL_GUIDE.md) | 32 exemplos práticos de PL/SQL |
+- [ORACLE_MIGRATION_README.md](project2025/docs/ORACLE_MIGRATION_README.md) | Guia de migração PostgreSQL→Oracle |
+- [ORACLE_DEPLOYMENT_GUIDE.md](project2025/docs/ORACLE_DEPLOYMENT_GUIDE.md) | Deploy em produção |
+- [ORACLE_MIGRATION_SUMMARY.md](project2025/ORACLE_MIGRATION_SUMMARY.md) | Resumo executivo do projeto |
 
 ### Guias Adicionais
 

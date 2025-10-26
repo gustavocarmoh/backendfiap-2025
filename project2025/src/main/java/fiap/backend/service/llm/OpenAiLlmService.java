@@ -18,7 +18,7 @@ import java.util.Map;
  * Fornece métodos gerais (summarizeReport) e específicos de otimização/alertas.
  */
 @Service
-public class OpenAiLlmService implements LlmService {
+public class OpenAiLlmService implements LlmService, OptimizationLlmService {
 
     private final HttpClient httpClient = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(10))

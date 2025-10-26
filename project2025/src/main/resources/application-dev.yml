@@ -6,7 +6,6 @@ spring:
     name: nutrixpert-api
 
   datasource:
-    # Default alinhado ao docker-compose (service name: oracle, service/SID: XEPDB1)
     url: ${SPRING_DATASOURCE_URL:jdbc:oracle:thin:@oracle:1521/XEPDB1}
     username: ${SPRING_DATASOURCE_USERNAME:nutrixpert}
     password: ${SPRING_DATASOURCE_PASSWORD:NutriXpert2025!}
@@ -37,21 +36,22 @@ spring:
     baseline-on-migrate: true
     clean-disabled: false
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,flyway
-  endpoint:
-    health:
-      show-details: when-authorized
-    flyway:
-      enabled: true
+llm:
+  api:
+    url: ${LLM_API_URL:https://api.openai.com/v1/chat/completions}
+    key: ${LLM_API_KEY:}
+    model: ${LLM_MODEL:gpt-4o-mini}
+  optimization:
+    model: ${LLM_OPTIMIZATION_MODEL:${LLM_MODEL:gpt-4o-mini}}
+  request:
+    timeout:
+      seconds: ${LLM_REQUEST_TIMEOUT_SECONDS:30}
 
-springdoc:
-  api-docs:
-    path: /api-docs
-  swagger-ui:
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: WARN
     path: /swagger-ui.html
     enabled: true
     operationsSorter: method

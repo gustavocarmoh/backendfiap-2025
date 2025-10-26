@@ -1,3 +1,4 @@
+version: '3.8'
 services:
   oracle:
     image: container-registry.oracle.com/database/express:21.3.0-xe
@@ -15,11 +16,11 @@ services:
       - 1521:1521  # Oracle Database
       - 5500:5500  # Oracle Enterprise Manager Express
     healthcheck:
-      # Usar SERVICE_NAME XEPDB1 (consistente com init-oracle.sh e application-dev.yml)
+      # Testa explicitamente o service name / PDB XEPDB1 (coerente com app)
       test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s sys/OraclePassword123@//localhost:1521/XEPDB1 as sysdba >/dev/null 2>&1"]
       interval: 30s
       timeout: 10s
-      retries: 10
+      retries: 15
       start_period: 120s
 
   app:
