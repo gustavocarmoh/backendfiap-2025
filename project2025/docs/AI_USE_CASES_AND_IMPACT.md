@@ -148,5 +148,3 @@ Prompt modelo para alertas:
 - Campo retornado pelo backend: `llmError` com mensagem de status — UI deve exibir texto amigável.
 
 ---
-
-Documento focado em experiência e ilustrações — removidas referências técnicas de privacidade conforme solicitado. Mantê‑lo vivo: atualizar com resultados dos testes A/B e métricas de adoção da IA.
