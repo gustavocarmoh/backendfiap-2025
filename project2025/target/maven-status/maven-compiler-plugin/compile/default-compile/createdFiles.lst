@@ -50,6 +50,7 @@ fiap/backend/service/SubscriptionServiceImpl.class
 fiap/backend/service/SubscriptionPlanServiceImpl.class
 fiap/backend/controller/AdminDashboardController.class
 fiap/backend/config/OpenApiConfig.class
+fiap/backend/service/llm/LlmService.class
 fiap/backend/repository/SubscriptionRepository.class
 fiap/backend/controller/AuthController.class
 fiap/backend/controller/SubscriptionPlanController.class
@@ -69,6 +70,7 @@ fiap/backend/config/SwaggerCustomization.class
 fiap/backend/controller/UserPhotoController.class
 fiap/backend/controller/SpringDocController.class
 fiap/backend/dto/GrowthMetricsDTO$PeriodMetricDTO.class
+fiap/backend/service/llm/OpenAiLlmService.class
 fiap/backend/domain/ChatMessage$MessageStatus.class
 fiap/backend/controller/OracleProcedureController.class
 fiap/backend/controller/UserInfoController.class

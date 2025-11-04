@@ -52,25 +52,13 @@ logging:
     root: INFO
     org.springframework.web: INFO
     org.hibernate.SQL: WARN
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
     path: /swagger-ui.html
     enabled: true
     operationsSorter: method
     tagsSorter: alpha
   show-actuator: true
-
-llm:
-  api:
-    url: ${LLM_API_URL:https://api.openai.com/v1/chat/completions}
-    key: ${LLM_API_KEY:}
-    model: ${LLM_MODEL:gpt-4o-mini}
-  optimization:
-    model: ${LLM_OPTIMIZATION_MODEL:${LLM_MODEL:gpt-4o-mini}}
-  request:
-    timeout:
-      seconds: ${LLM_REQUEST_TIMEOUT_SECONDS:30}
-
-logging:
-  level:
-    root: INFO
-    org.springframework.web: INFO
-    org.hibernate.SQL: WARN

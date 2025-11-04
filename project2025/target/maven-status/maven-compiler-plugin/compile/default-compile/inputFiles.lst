@@ -74,3 +74,5 @@
 /workspaces/project2025/src/main/java/fiap/backend/service/SubscriptionServiceImpl.java
 /workspaces/project2025/src/main/java/fiap/backend/service/UserPhotoService.java
 /workspaces/project2025/src/main/java/fiap/backend/service/UserPlanContextService.java
+/workspaces/project2025/src/main/java/fiap/backend/service/llm/LlmService.java
+/workspaces/project2025/src/main/java/fiap/backend/service/llm/OpenAiLlmService.java

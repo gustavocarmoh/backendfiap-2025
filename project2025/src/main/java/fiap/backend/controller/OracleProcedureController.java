@@ -281,15 +281,6 @@ public class OracleProcedureController {
         return ResponseEntity.ok(relatorio);
     }
 
-    // Procedure: proc_registrar_alerta_nutricional
-    @PostMapping("/alertas-nutricionais/{userId}")
-    public ResponseEntity<Integer> registrarAlertaNutricional(@PathVariable String userId,
-                                                              @RequestParam(defaultValue = "7") int dias) {
-
-        int result = this.oracleService.registrarAlertaNutricional(userId, dias);
-        return ResponseEntity.ok(result);
-    }
-
     // Procedure: proc_gerar_relatorio_consumo
     @PostMapping("/relatorio-llm/{userId}")
     @Operation(summary = "Gerar relatório + resumo via LLM", description = "Gera relatório de consumo e pede à LLM um resumo executivo e recomendações")
